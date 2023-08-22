@@ -2,41 +2,49 @@
 from bs4 import BeautifulSoup
 import csv
 from tkinter import *
+import matplotlib.pyplot as plt
+from tkinter import filedialog as fd
+from tkinter.messagebox import showinfo
 
 # Tkinter setup
 root = Tk()
-root.title('OOTP 23 HTML2CSV')
+root.title('OOTP HTML2CSV')
 root.geometry('340x290+10+10')
 root.resizable(width=False, height=False)
 root.iconbitmap('ootp.ico')
 
 # Tkinter objects
 # Text
-header = Label(root, text="OOTP 23 HTML2CSV")
+header = Label(root, text="OOTP HTML2CSV")
 header.configure(font=("Arial", 20))
 header.place(x=32, y=5)
-text1 = Label(root, text="HTML File Name:")
+text1 = Label(root, text="File:")
 text1.place(x=5, y=45)
 text2 = Label(root, text="Teams in your league:")
 text2.place(x=5, y=75)
 result_text = Label(root, text="Result:")
 result_text.place(x=5, y=258)
+
 # Buttons
+button0 = Button(root, text="Select", width=5, command=lambda: select_file())
+button0.place(x=285, y=42)
 button1 = Button(root, text="Convert to CSV", width=45, command=lambda: option1())
 button1.place(x=5, y=105)
 button2 = Button(root, text="Convert to CSV and Get Underperforming Players (Hitters)", width=45, command=lambda: option2())
 button2.place(x=5, y=135)
 button3 = Button(root, text="Convert to CSV and Get Underperforming Players (Pitchers)", width=45, command=lambda: option3())
 button3.place(x=5, y=165)
-button4 = Button(root, text="Convert to CSV and Get Undervalued College Hitters", width=45, command=lambda: option4())
+button4 = Button(root, text="Convert to CSV and Get College Targets (Hitters)", width=45, command=lambda: option4())
 button4.place(x=5, y=195)
-button5 = Button(root, text="Convert to CSV and Get Undervalued College Pitchers", width=45, command=lambda: option5())
+button5 = Button(root, text="Convert to CSV and Get College Targets (Pitchers)", width=45, command=lambda: option5())
 button5.place(x=5, y=225)
+
 # Entry Fields
-entry1 = Entry(root, width=37)
-entry1.place(x=105, y=45)
+entry1 = Entry(root, width=41)
+entry1.place(x=32, y=45)
 result = Entry(root, width=46)
 result.place(x=48, y=260)
+
 # Option Menu
 options = ["5-10 Teams", "11-15 Teams", "16 Teams", "17-22 Teams", "23-29 Teams", "30 Teams", "31-35 Teams", "36+ Teams"]
 clicked = StringVar()
@@ -45,7 +53,14 @@ dropdown1 = OptionMenu(root, clicked, *options)
 dropdown1.config(width=27)
 dropdown1.place(x=125, y=70)
 
-# I love BeautifulSoup!!! 10/10
+def select_file():
+    filename = fd.askopenfilename(
+        title='Select a file',
+        initialdir='/',
+        filetypes=(("HTML files", "*.html"),)
+    )
+
+    entry1.insert(END, filename)
 
 def option1():
     global main_option
@@ -59,11 +74,14 @@ def option1():
     function(main_menu_input)
 
 def option2():
+    # Note to self: get rid of the dang global variables. Terrible for optimization
+    # Way too lazy for this shit man
     global main_option
     global teams_num
     main_option = "2"
     main_menu_input = entry1.get()
     teams_primary = clicked.get()
+    # Haha poorly optimized if/elif repeated among functions. It works I guess
     if teams_primary == "5-10 Teams":
         teams_num = .55
     elif teams_primary == "11-15 Teams":
@@ -185,7 +203,7 @@ def function(main_menu_input):
     global names
     global positions
     try:
-            # Open the html file, parse it with BeautifulSoup
+         # Open the html file, parse it with BeautifulSoup
         with open(main_menu_input) as f:
             soup = BeautifulSoup(f, 'html.parser')
 
@@ -230,8 +248,9 @@ def function(main_menu_input):
         # Write the output CSV
         with open('output.csv', 'w', newline='') as csvfile:
             filecsv = csv.writer(csvfile) # Read the file into a CSV writer
-            filecsv.writerow(names_header + list)
-            length = int(len(stats_list) / len(temp))
+            filecsv.writerow(names_header + list) # Write the header
+            length = int(len(stats_list) / len(temp)) # Get the number of rows that we need to writie
+            # This is complicated, if you're trying to learn from source code I would recommend moving on
             for i in range(0, length):
                 filecsv.writerow(names_list[0:(len(names_temp)-2):] + stats_list[0:len(temp):])
                 for i in range(0, len(temp)):
@@ -392,5 +411,6 @@ def getCollegePitchers():
             for i in range(0, len(output_names_list)):
                 g.write(output_names_list[i] + '--' + str(output_rating_list[i]) + '\n')
 
+# What the fuck is this stupid ass runty ass code
 # Tkinter mainloop
 root.mainloop()
