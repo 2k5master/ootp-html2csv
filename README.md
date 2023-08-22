@@ -10,22 +10,11 @@ I recommend using filters. For hitters, I use a filter where the hitter must hav
 
 Next, click report>write report to disk. Then navigate to your league save folder>news>html>temp and get the most recent file. Then paste it into the tool's directory and rename it to whatever you want.
 
-Finally, launch the tool, input the html name (don't forget to add .html to the end), select the league size, and then click the applicable option. The tool's in-app prompts should guide you from there.
+Finally, launch the tool, select your html file, choose the league size, and then click the applicable option. The tool's in-app prompts should guide you from there.
 
 # Troubleshooting/Debugging
 If something is wrong with your CSV, first make sure that you were using the correct view. Re-extract the html and try again. If that doesn't work, send the html my way. You can reach me on discord, reddit, or the ootp forums. 
 
-Some common fixes to some other problems are:
-1) Check that the file name is correct
-2) Check that you added .html to the end
-3) Make sure that the correct filters are applied in game
+Another problem might come if your html is somehow corrupted. So I always recommend getting a fresh html from the game if something goes wrong. If you see a python error in the console, reach out to me because it is likely an issue on my end.
 
 If the program either doesn't output any players or puts out more than 30 players, that's an issue. Make sure that you select the correct league size. If you still see an issue, send me the html/csv.
-
-# What's Next?
-1) The ability to evaluate relief pitchers.
-2) Improved formulas
-3) Taking fielding stats into account
-4) Customizable formulas inside the app
-5) Filters inside the app
-Note: These features are possibilities, and they are by no means guaranteed.
